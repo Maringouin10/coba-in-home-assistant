@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "COBA / ColNET",
+        "description": "Sign in to your institution's COBA / ColNET student portal.",
+        "data": {
+          "url": "Portal address (URL)",
+          "username": "Username",
+          "password": "Password"
+        },
+        "data_description": {
+          "url": "e.g. https://mycollege.coba.ca/colnet/login.asp",
+          "username": "Your user code / admission (DA) number",
+          "password": "Your ColNET password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "COBA re-authentication",
+        "description": "The password for {username} is no longer valid. Enter the new password.",
+        "data": {
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to reach the portal. Check the URL and your connection.",
+      "invalid_auth": "Invalid username or password.",
+      "unknown": "Unexpected error. Check the logs."
+    },
+    "abort": {
+      "already_configured": "This COBA account is already configured.",
+      "reauth_successful": "Re-authentication successful."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "COBA options",
+        "data": {
+          "scan_interval": "Refresh interval (minutes)",
+          "debug": "Debug logging (sections HTML)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "messages_recus": { "name": "Messages received" },
+      "dernier_message": { "name": "Last message" },
+      "derniere_note": { "name": "Last grade" },
+      "prochains_cours": { "name": "Upcoming courses" },
+      "dernier_suivi": { "name": "Last follow-up" }
+    }
+  }
+}
