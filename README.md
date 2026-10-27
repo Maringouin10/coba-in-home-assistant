@@ -1,46 +1,38 @@
-# COBA / ColNET — Intégration Home Assistant
+# COBA — Portail scolaire (pedNet) pour Home Assistant
 
-Intégration **Home Assistant** pour le portail étudiant **COBA / ColNET** (cégeps /
-collèges, Québec). Connexion par **URL + nom d'utilisateur + mot de passe**, puis
-exposition des informations scolaires en capteurs.
-
-> COBA/ColNET n'a pas d'API publique : l'intégration ouvre une session web (comme
-> un navigateur / l'app *COBA Campus*) et lit les pages Messagerie, Résultats,
-> Horaire et Suivi.
+Intégration personnalisée pour le portail scolaire **COBA pedNet**
+(ex. `https://portail.i-esmc.qc.ca/pedNet/login.coba`). Elle reproduit ce que fait
+un navigateur (connexion, puis lecture des pages Travaux, Courriels et Horaire) —
+COBA n'a pas d'API publique.
 
 ## Capteurs
 
-| Capteur | Description |
-|--------|-------------|
-| **Messages reçus** | nombre de messages (+ liste et non-lus en attributs) |
-| **Dernier message** | expéditeur — objet (+ détails) |
-| **Dernière note** | dernier résultat (+ cours / évaluation / date) |
-| **Prochains cours** | prochain cours (état) + **les 5 prochains** dans l'attribut `cours` |
-| **Dernier suivi** | date — type — description |
+| Capteur | Valeur |
+|---|---|
+| **Ma moyenne** | moyenne (%) de toutes tes évaluations notées (détail par cours en attribut `cours`) |
+| **Moyenne de la classe** | moyenne (%) de la classe pour ces mêmes évaluations |
+| **Dernier message** | objet du dernier courriel (attributs : expéditeur, aperçu, 10 derniers messages) |
+| **Date du dernier message** | date telle qu'affichée dans le portail |
+| **Messages non lus** | nombre de courriels non lus |
+| **Jour d'horaire** | numéro du jour du cycle (ex. `6` pour « Jour 6 ») |
 
-## Installation via HACS
+Les moyennes sont calculées comme dans le workflow n8n d'origine : moyenne simple
+des pourcentages (A=95, B=85, C=75 pour les notes en lettres).
 
-1. HACS → menu ⋮ → **Dépôts personnalisés**
-2. URL : `https://github.com/Maringouin10/coba-homeassistant` — catégorie **Intégration**
-3. **Télécharger** la carte *COBA / ColNET*, puis redémarrer Home Assistant
-4. **Paramètres → Appareils et services → Ajouter une intégration → COBA**
-5. Saisir l'**URL** du portail (ex. `https://moncollege.coba.ca/colnet/login.asp`),
-   le **nom d'utilisateur** (code d'usager / DA) et le **mot de passe**
+## Installation (HACS)
 
-## Options
+1. HACS → ⋮ → **Dépôts personnalisés** → `https://github.com/Maringouin10/coba-in-home-assistant`, catégorie **Intégration**
+2. Télécharger, redémarrer Home Assistant
+3. **Paramètres → Appareils et services → Ajouter une intégration → COBA**
+4. Saisir l'URL du portail, le code d'usager et le mot de passe (stockés par Home Assistant, jamais dans le dépôt)
 
-⚙️ *Configurer* : intervalle de rafraîchissement (min. 5 min, défaut 15) et
-**journalisation de débogage** (écrit le HTML des sections dans le journal HA pour
-ajuster l'analyse à un portail particulier).
+Options : intervalle de rafraîchissement (30 min par défaut) et journalisation de
+débogage.
 
-## Adaptation
+## Si une valeur reste vide
 
-Toute la logique propre au portail est dans `custom_components/coba/api.py`
-(détection auto du formulaire de login, découverte des sections par mots-clés,
-analyse des tableaux par en-têtes). Mots-clés ajustables dans `const.py`
-(`SECTION_KEYWORDS`).
-
-## Pré-requis
-
-- Home Assistant 2024.11+ recommandé
-- Accès réseau de Home Assistant vers le portail de l'établissement
+Le message non lu, la date du message et le « jour d'horaire » sont détectés par
+heuristique (le HTML exact du portail varie). Active **Journalisation de débogage**
+dans les options : le HTML des pages (tableau de bord, travaux, courriels) est écrit
+dans les journaux de Home Assistant, ce qui permet d'ajuster les expressions dans
+`custom_components/coba/api.py` (`_parse_messages`, `_parse_jour`).

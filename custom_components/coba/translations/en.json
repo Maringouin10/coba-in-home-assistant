@@ -2,17 +2,17 @@
   "config": {
     "step": {
       "user": {
-        "title": "COBA / ColNET",
-        "description": "Sign in to your institution's COBA / ColNET student portal.",
+        "title": "COBA school portal",
+        "description": "Sign in to your school's COBA (pedNet) portal.",
         "data": {
-          "url": "Portal address (URL)",
-          "username": "Username",
+          "url": "Portal URL",
+          "username": "User code",
           "password": "Password"
         },
         "data_description": {
-          "url": "e.g. https://mycollege.coba.ca/colnet/login.asp",
-          "username": "Your user code / admission (DA) number",
-          "password": "Your ColNET password"
+          "url": "e.g. https://portail.i-esmc.qc.ca/pedNet/login.coba",
+          "username": "Your portal user code",
+          "password": "Your portal password"
         }
       },
       "reauth_confirm": {
@@ -24,8 +24,8 @@
       }
     },
     "error": {
-      "cannot_connect": "Unable to reach the portal. Check the URL and your connection.",
-      "invalid_auth": "Invalid username or password.",
+      "cannot_connect": "Cannot reach the portal. Check the URL and your connection.",
+      "invalid_auth": "Invalid user code or password.",
       "unknown": "Unexpected error. Check the logs."
     },
     "abort": {
@@ -39,18 +39,31 @@
         "title": "COBA options",
         "data": {
           "scan_interval": "Refresh interval (minutes)",
-          "debug": "Debug logging (sections HTML)"
+          "debug": "Debug logging (writes page HTML to the logs)"
         }
       }
     }
   },
   "entity": {
     "sensor": {
-      "messages_recus": { "name": "Messages received" },
-      "dernier_message": { "name": "Last message" },
-      "derniere_note": { "name": "Last grade" },
-      "prochains_cours": { "name": "Upcoming courses" },
-      "dernier_suivi": { "name": "Last follow-up" }
+      "moyenne_eleve": {
+        "name": "My average"
+      },
+      "moyenne_classe": {
+        "name": "Class average"
+      },
+      "dernier_message": {
+        "name": "Last message"
+      },
+      "date_dernier_message": {
+        "name": "Last message date"
+      },
+      "messages_non_lus": {
+        "name": "Unread messages"
+      },
+      "jour_horaire": {
+        "name": "Schedule day"
+      }
     }
   }
 }

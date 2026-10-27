@@ -10,7 +10,7 @@ from homeassistant.config_entries import (
     OptionsFlow,
 )
 from homeassistant.core import callback
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .api import CobaAuthError, CobaClient, CobaConnectionError
 from .const import (
@@ -20,13 +20,14 @@ from .const import (
     CONF_URL,
     CONF_USERNAME,
     DEFAULT_SCAN_INTERVAL_MINUTES,
+    DEFAULT_URL,
     DOMAIN,
     MIN_SCAN_INTERVAL_MINUTES,
 )
 
 USER_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_URL): str,
+        vol.Required(CONF_URL, default=DEFAULT_URL): str,
         vol.Required(CONF_USERNAME): str,
         vol.Required(CONF_PASSWORD): str,
     }
@@ -35,10 +36,13 @@ USER_SCHEMA = vol.Schema(
 
 async def _validate(hass, url: str, username: str, password: str) -> str:
     """Try to log in. Returns the normalized base URL or raises an error key."""
-    session = async_get_clientsession(hass)
+    session = async_create_clientsession(hass)
     client = CobaClient(session, url=url, username=username, password=password)
-    await client.login()
-    return client.base_url
+    try:
+        await client.login()
+    finally:
+        await session.close()
+    return client.login_url
 
 
 class CobaConfigFlow(ConfigFlow, domain=DOMAIN):

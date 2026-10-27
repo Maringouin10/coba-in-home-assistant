@@ -2,17 +2,17 @@
   "config": {
     "step": {
       "user": {
-        "title": "COBA / ColNET",
-        "description": "Connectez-vous au portail étudiant COBA / ColNET de votre établissement.",
+        "title": "COBA - Portail scolaire",
+        "description": "Connectez-vous au portail scolaire COBA (pedNet) de votre établissement.",
         "data": {
           "url": "Adresse du portail (URL)",
-          "username": "Nom d'utilisateur",
+          "username": "Code d'usager",
           "password": "Mot de passe"
         },
         "data_description": {
-          "url": "Ex. : https://moncollege.coba.ca/colnet/login.asp",
-          "username": "Votre code d'usager / numéro de DA",
-          "password": "Votre mot de passe ColNET"
+          "url": "Ex. : https://portail.i-esmc.qc.ca/pedNet/login.coba",
+          "username": "Votre code d'usager du portail",
+          "password": "Votre mot de passe du portail"
         }
       },
       "reauth_confirm": {
@@ -39,18 +39,31 @@
         "title": "Options COBA",
         "data": {
           "scan_interval": "Intervalle de rafraîchissement (minutes)",
-          "debug": "Journalisation de débogage (HTML des sections)"
+          "debug": "Journalisation de débogage (écrit le HTML des pages dans les journaux)"
         }
       }
     }
   },
   "entity": {
     "sensor": {
-      "messages_recus": { "name": "Messages reçus" },
-      "dernier_message": { "name": "Dernier message" },
-      "derniere_note": { "name": "Dernière note" },
-      "prochains_cours": { "name": "Prochains cours" },
-      "dernier_suivi": { "name": "Dernier suivi" }
+      "moyenne_eleve": {
+        "name": "Ma moyenne"
+      },
+      "moyenne_classe": {
+        "name": "Moyenne de la classe"
+      },
+      "dernier_message": {
+        "name": "Dernier message"
+      },
+      "date_dernier_message": {
+        "name": "Date du dernier message"
+      },
+      "messages_non_lus": {
+        "name": "Messages non lus"
+      },
+      "jour_horaire": {
+        "name": "Jour d'horaire"
+      }
     }
   }
 }

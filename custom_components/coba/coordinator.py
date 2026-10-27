@@ -25,7 +25,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class CobaCoordinator(DataUpdateCoordinator[dict[str, Any]]):
-    """Fetches and parses the COBA / ColNET portal on a schedule."""
+    """Fetches and parses the COBA pedNet portal on a schedule."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         self.entry = entry

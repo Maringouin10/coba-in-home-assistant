@@ -10,26 +10,6 @@ CONF_SCAN_INTERVAL = "scan_interval"
 CONF_DEBUG = "debug"
 
 # Defaults
-DEFAULT_SCAN_INTERVAL_MINUTES = 15
+DEFAULT_URL = "https://portail.i-esmc.qc.ca/pedNet/login.coba"
+DEFAULT_SCAN_INTERVAL_MINUTES = 30
 MIN_SCAN_INTERVAL_MINUTES = 5
-
-# Number of upcoming courses to expose
-UPCOMING_COURSES = 5
-
-# Keywords used to auto-discover the portal sections from the menu links.
-# Values are accent-insensitive, lowercase. The first link whose text contains
-# one of these tokens is used for the matching section.
-SECTION_KEYWORDS: dict[str, tuple[str, ...]] = {
-    "messages": ("messagerie", "message", "courrier", "boite", "boîte"),
-    "notes": (
-        "resultat",
-        "résultat",
-        "note",
-        "evaluation",
-        "évaluation",
-        "bulletin",
-        "rendement",
-    ),
-    "cours": ("horaire", "cours", "agenda", "calendrier", "emploi du temps"),
-    "suivi": ("suivi", "intervention", "discipline", "encadrement"),
-}
