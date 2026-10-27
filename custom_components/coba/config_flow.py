@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import logging
 from typing import Any
 
+import aiohttp
 import voluptuous as vol
 from homeassistant.config_entries import (
     ConfigEntry,
@@ -25,6 +27,8 @@ from .const import (
     MIN_SCAN_INTERVAL_MINUTES,
 )
 
+_LOGGER = logging.getLogger(__name__)
+
 USER_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_URL, default=DEFAULT_URL): str,
@@ -36,7 +40,7 @@ USER_SCHEMA = vol.Schema(
 
 async def _validate(hass, url: str, username: str, password: str) -> str:
     """Try to log in. Returns the normalized base URL or raises an error key."""
-    session = async_create_clientsession(hass)
+    session = async_create_clientsession(hass, cookie_jar=aiohttp.CookieJar(unsafe=True))
     client = CobaClient(session, url=url, username=username, password=password)
     try:
         await client.login()
@@ -63,11 +67,14 @@ class CobaConfigFlow(ConfigFlow, domain=DOMAIN):
                     user_input[CONF_USERNAME],
                     user_input[CONF_PASSWORD],
                 )
-            except CobaAuthError:
+            except CobaAuthError as err:
+                _LOGGER.warning("COBA: authentification refusée (%s)", err)
                 errors["base"] = "invalid_auth"
-            except CobaConnectionError:
+            except CobaConnectionError as err:
+                _LOGGER.warning("COBA: connexion impossible (%s)", err)
                 errors["base"] = "cannot_connect"
             except Exception:  # noqa: BLE001
+                _LOGGER.exception("COBA: erreur inattendue pendant la connexion")
                 errors["base"] = "unknown"
             else:
                 await self.async_set_unique_id(
@@ -105,11 +112,14 @@ class CobaConfigFlow(ConfigFlow, domain=DOMAIN):
                     data[CONF_USERNAME],
                     data[CONF_PASSWORD],
                 )
-            except CobaAuthError:
+            except CobaAuthError as err:
+                _LOGGER.warning("COBA: authentification refusée (%s)", err)
                 errors["base"] = "invalid_auth"
-            except CobaConnectionError:
+            except CobaConnectionError as err:
+                _LOGGER.warning("COBA: connexion impossible (%s)", err)
                 errors["base"] = "cannot_connect"
             except Exception:  # noqa: BLE001
+                _LOGGER.exception("COBA: erreur inattendue pendant la connexion")
                 errors["base"] = "unknown"
             else:
                 self.hass.config_entries.async_update_entry(

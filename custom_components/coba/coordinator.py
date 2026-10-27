@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import logging
+
+import aiohttp
 from datetime import timedelta
 from typing import Any
 
@@ -34,7 +36,9 @@ class CobaCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         )
         # A dedicated session keeps the portal's auth cookies isolated from the
         # rest of Home Assistant.
-        session = async_create_clientsession(hass)
+        session = async_create_clientsession(
+            hass, cookie_jar=aiohttp.CookieJar(unsafe=True)
+        )
         self.client = CobaClient(
             session,
             url=entry.data[CONF_URL],
@@ -55,4 +59,5 @@ class CobaCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         except CobaAuthError as err:
             raise ConfigEntryAuthFailed("Identifiants COBA invalides") from err
         except CobaConnectionError as err:
+            _LOGGER.warning("COBA: portail injoignable: %s", err)
             raise UpdateFailed(f"Impossible de joindre le portail COBA: {err}") from err
